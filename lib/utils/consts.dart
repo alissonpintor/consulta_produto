@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const baseUrl = 'https://treina.stoky.dev.br/mge/service.sbr';
+
 // Main Colors
 const cardBackgroundColor = Color(0xFF21222D);
 const primaryColor = Color(0xFF2697FF);

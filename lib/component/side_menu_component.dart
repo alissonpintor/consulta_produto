@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/data/side_menu_data.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
       child: InkWell(
         onTap: () => setState(() {
           selectedIndex = index;
+          print(AuthService().currentUser!.username);
         }),
         child: Row(
           children: [

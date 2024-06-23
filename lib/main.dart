@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:consulta_produto/pages/home_page.dart';
 import 'package:consulta_produto/routes.dart';
+import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -33,35 +34,16 @@ class MyApp extends StatelessWidget {
 
   final _httpClient = http.Client();
 
-  Future<void> login() async {
-    String baseUrl = 'https://treina.stoky.dev.br/mge/service.sbr';
-    String serviceName = 'MobileLoginSP.login';
-    Uri loginUrl =
-        Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
-
-    http.Response data = await _httpClient.post(
-      loginUrl,
-      body: jsonEncode({
-        "serviceName": "MobileLoginSP.login",
-        "requestBody": {
-          "NOMUSU": {"\$": "LUCAS"},
-          "INTERNO": {"\$": "15975348655"},
-          "KEEPCONNECTED": {"\$": "S"}
-        }
-      }),
-    );
-
-    String sessionId =
-        jsonDecode(data.body)['responseBody']['jsessionid']['\$'];
-
-    _getProduto(sessionId);
+  Future<void> doLogin() async {
+    await AuthService().login('alisson', '111222333');
+    var user = AuthService().currentUser;
+    print(user != null ? user.sessionId : 'Nao possui');
   }
 
-  Future<void> _getProduto(sessionId) async {
+  Future<void> _getProduto() async {
     String baseUrl = 'https://treina.stoky.dev.br/mge/service.sbr';
     String serviceName = 'CRUDServiceProvider.loadRecords';
-    Uri url = Uri.parse(
-        '$baseUrl?serviceName=$serviceName&outputType=json&mgeSession=$sessionId');
+    Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
 
     print(url);
 
@@ -87,7 +69,7 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
-      headers: {'Cookie': 'JSESSIONID=$sessionId'},
+      headers: {'Cookie': 'JSESSIONID=${AuthService().currentUser?.sessionId}'},
     );
 
     //print(data.headers);
@@ -97,6 +79,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    doLogin();
     return MaterialApp(
       title: 'Consulta Produtos',
       debugShowCheckedModeBanner: false,
