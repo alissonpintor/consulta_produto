@@ -1,7 +1,10 @@
-import 'package:consulta_produto/component/main_content_component.dart';
-import 'package:consulta_produto/component/side_menu_component.dart';
+import 'package:consulta_produto/components/main_content_component.dart';
+import 'package:consulta_produto/components/product_characteristics_component.dart';
+import 'package:consulta_produto/components/side_menu_component.dart';
+import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/utils/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,8 +21,12 @@ class HomePage extends StatelessWidget {
       endDrawer: Responsive.isMobile(context)
           ? SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
-              child: const Center(
-                child: Text('Right Menu Mobile'),
+              child: Center(
+                child: Container(
+                  color: backgroundColor,
+                  padding: EdgeInsets.only(left: 15),
+                  child: ProductCharacteristicsComponent(),
+                ),
               ),
             )
           : null,
@@ -37,9 +44,7 @@ class HomePage extends StatelessWidget {
             if (Responsive.isDesktop(context))
               Expanded(
                 flex: 3,
-                child: Center(
-                  child: Text('Right Content Desktop'),
-                ),
+                child: ProductCharacteristicsComponent(),
               ),
           ],
         ),

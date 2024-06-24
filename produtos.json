@@ -1,0 +1,18 @@
+{_rmd: {CODPROD: {$: {
+                "decVlr": 2,
+                "decQtd": 2,
+                "controle": {
+                    "tipoContEst": "N",
+                    "listaContEst": [
+                        ""
+                    ],
+                    "usaMascara": false
+                }
+            }, provider: PRODUTORMP
+        }
+    }, f0: {$: 28839
+    }, f1: {$: ASSENTO SANIT. ALMOF. BRANCO (10)
+    }, f2: {$: ALUMASA
+    }, f3: {$: UN
+    }
+}

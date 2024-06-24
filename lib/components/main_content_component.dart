@@ -1,5 +1,5 @@
-import 'package:consulta_produto/component/header_content_component.dart';
-import 'package:consulta_produto/component/product_list_component.dart';
+import 'package:consulta_produto/components/header_content_component.dart';
+import 'package:consulta_produto/components/product_list_component.dart';
 import 'package:flutter/material.dart';
 
 class MainContentComponent extends StatelessWidget {
