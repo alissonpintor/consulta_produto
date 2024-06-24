@@ -2,6 +2,8 @@ import 'package:consulta_produto/model/user_model.dart';
 import 'package:consulta_produto/services/auth/auth_sankhya_service.dart';
 
 abstract class AuthService {
+  static AuthService? _auth;
+
   UserModel? get currentUser;
 
   Future<void> login(
@@ -12,6 +14,7 @@ abstract class AuthService {
   Future<void> logout();
 
   factory AuthService() {
-    return AuthSankhyaService();
+    _auth ??= AuthSankhyaService();
+    return _auth!;
   }
 }

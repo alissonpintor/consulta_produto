@@ -35,9 +35,8 @@ class MyApp extends StatelessWidget {
   final _httpClient = http.Client();
 
   Future<void> doLogin() async {
-    await AuthService().login('alisson', '111222333');
-    var user = AuthService().currentUser;
-    print(user != null ? user.sessionId : 'Nao possui');
+    await AuthService().login('alisson', 'studiowork');
+    _getProduto();
   }
 
   Future<void> _getProduto() async {
