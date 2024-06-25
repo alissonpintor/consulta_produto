@@ -1,3 +1,4 @@
+import 'package:consulta_produto/routes.dart';
 import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/utils/responsive.dart';
@@ -15,11 +16,11 @@ class _LoginPageState extends State<LoginPage> {
   final _usuarioController = TextEditingController();
   final _senhaController = TextEditingController();
 
-  void _onSubmit() {
+  Future<void> _onSubmit() async {
     if (_usuarioController.text.isNotEmpty &&
         _senhaController.text.isNotEmpty) {
-      AuthService().login(_usuarioController.text, _senhaController.text);
-      print(AuthService().currentUser!.username);
+      await AuthService().login(_usuarioController.text, _senhaController.text);
+      Navigator.popAndPushNamed(context, AppRoutes.consulta);
     }
   }
 

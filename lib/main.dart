@@ -40,15 +40,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  Future<void> _login() async {
-    await AuthService().login('alisson', 'studiowork');
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    _login();
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProductSankhyaService())

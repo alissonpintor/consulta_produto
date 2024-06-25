@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:consulta_produto/routes.dart';
 import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/data/side_menu_data.dart';
@@ -61,7 +62,10 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
       child: InkWell(
         onTap: () => setState(() {
           selectedIndex = index;
-          print(AuthService().currentUser!.username);
+          if (data.menu[index].title == 'SignOut') {
+            AuthService().logout();
+            Navigator.popAndPushNamed(context, AppRoutes.home);
+          }
         }),
         child: Row(
           children: [

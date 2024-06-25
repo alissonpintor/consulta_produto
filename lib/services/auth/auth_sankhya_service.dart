@@ -46,6 +46,6 @@ class AuthSankhyaService with ChangeNotifier implements AuthService {
 
   @override
   Future<void> logout() async {
-    // TODO: implement logout
+    _user = null;
   }
 }

@@ -12,6 +12,7 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
   final String baseUrl = 'https://treina.stoky.dev.br/mge/service.sbr';
   final String serviceName = 'CRUDServiceProvider.loadRecords';
   final List<ProductModel> _products = [];
+  int _paginationCount = 0;
 
   ProductSankhyaService() {
     loadProducts();
@@ -25,10 +26,10 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
     UserModel? currentUser = AuthService().currentUser;
     Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
 
-    if (currentUser == null) {
-      await AuthService().login('alisson', 'studiowork');
-      currentUser = AuthService().currentUser;
-    }
+    // if (currentUser == null) {
+    //   await AuthService().login('alisson', 'studiowork');
+    //   currentUser = AuthService().currentUser;
+    // }
 
     http.Response data = await http.post(
       url,
@@ -82,14 +83,17 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
   }
 
   @override
-  Future<void> searchProdutcts(String query) async {
+  Future<void> searchProdutcts(String query,
+      {bool isPagination = false}) async {
     UserModel? currentUser = AuthService().currentUser;
     Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
 
-    if (currentUser == null) {
-      await AuthService().login('alisson', 'studiowork');
-      currentUser = AuthService().currentUser;
-    }
+    _paginationCount = isPagination ? _paginationCount : 0;
+
+    // if (currentUser == null) {
+    //   await AuthService().login('alisson', 'studiowork');
+    //   currentUser = AuthService().currentUser;
+    // }
 
     http.Response data = await http.post(
       url,
@@ -99,7 +103,7 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
             "dataSet": {
               "rootEntity": "Produto",
               "includePresentationFields": "N",
-              "offsetPage": "0",
+              "offsetPage": "$_paginationCount",
               "criteria": {
                 "expression": {"\$": "this.MARCA like ?"},
                 "parameter": [
@@ -122,20 +126,27 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
         jsonDecode(data.body)['responseBody']['entities']['entity'] as List;
     List<ProductModel> products = [];
 
-    jsonList.forEach((item) {
-      //item = item['_rmd'];
+    var metadata = jsonDecode(data.body);
+    var hasMoreResult = metadata['responseBody']['entities']['hasMoreResult'];
+    if (hasMoreResult == 'true') {
+      _paginationCount =
+          int.parse(metadata['responseBody']['entities']['offsetPage']) + 1;
+    }
 
+    print(_paginationCount);
+
+    for (var item in jsonList) {
       ProductModel product = ProductModel(
-          codigo: int.parse(item['f0']['\$']),
-          descricao: item['f1']['\$'],
-          marca: item['f2']['\$'],
-          valor: 59.99,
-          unidade: item['f3']['\$'],
-          agrupamentoMinimo: 1,
-          referencia: item['f4']['\$']);
-
+        codigo: int.parse(item['f0']['\$']),
+        descricao: item['f1']['\$'],
+        marca: item['f2']['\$'],
+        valor: 59.99,
+        unidade: item['f3']['\$'],
+        agrupamentoMinimo: 1,
+        referencia: item['f4']['\$'],
+      );
       products.add(product);
-    });
+    }
 
     _products.clear();
     _products.addAll([...products]);
