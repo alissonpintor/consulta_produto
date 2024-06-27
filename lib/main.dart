@@ -6,6 +6,7 @@ import 'package:consulta_produto/routes.dart';
 import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/services/products/product_sankhya_service.dart';
 import 'package:consulta_produto/services/products/product_service.dart';
+import 'package:consulta_produto/services/products/search_product_sankhya.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ProductSankhyaService())
+        ChangeNotifierProvider(create: (context) => ProductSankhyaService()),
+        ChangeNotifierProvider(create: (context) => SearchProductSankhya()),
       ],
       child: MaterialApp(
         title: 'Consulta Produtos',

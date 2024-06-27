@@ -5,6 +5,7 @@ import 'package:consulta_produto/model/product_model.dart';
 import 'package:consulta_produto/model/user_model.dart';
 import 'package:consulta_produto/services/auth/auth_service.dart';
 import 'package:consulta_produto/services/products/product_service.dart';
+import 'package:consulta_produto/services/request_payload.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,36 +26,12 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
   Future<void> loadProducts() async {
     UserModel? currentUser = AuthService().currentUser;
     Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
-
-    // if (currentUser == null) {
-    //   await AuthService().login('alisson', 'studiowork');
-    //   currentUser = AuthService().currentUser;
-    // }
+    var payload = RequestPayload();
+    payload.addFilterDescricao('JOEL%SOLD%25MM%');
 
     http.Response data = await http.post(
       url,
-      body: jsonEncode(
-        {
-          "requestBody": {
-            "dataSet": {
-              "rootEntity": "Produto",
-              "includePresentationFields": "N",
-              "offsetPage": "0",
-              "criteria": {
-                "expression": {"\$": "this.MARCA like ?"},
-                "parameter": [
-                  {"\$": "KRONA%", "type": "S"}
-                ]
-              },
-              "entity": {
-                "fieldset": {
-                  "list": "CODPROD,DESCRPROD,MARCA,CODVOL,REFERENCIA"
-                }
-              }
-            }
-          }
-        },
-      ),
+      body: payload.getJsonEncode(),
       headers: {'Cookie': 'JSESSIONID=${currentUser?.sessionId}'},
     );
 

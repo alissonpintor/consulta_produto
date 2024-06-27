@@ -1,4 +1,5 @@
 import 'package:consulta_produto/services/products/product_sankhya_service.dart';
+import 'package:consulta_produto/services/products/search_product_sankhya.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class HeaderContentComponent extends StatelessWidget {
   const HeaderContentComponent({super.key});
 
   void _onSubmit(String value, BuildContext context) {
-    Provider.of<ProductSankhyaService>(
+    Provider.of<SearchProductSankhya>(
       context,
       listen: false,
     ).searchProdutcts(value);

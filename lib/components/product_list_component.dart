@@ -3,6 +3,7 @@ import 'package:consulta_produto/components/card_component.dart';
 import 'package:consulta_produto/components/side_menu_component.dart';
 import 'package:consulta_produto/model/product_model.dart';
 import 'package:consulta_produto/services/products/product_sankhya_service.dart';
+import 'package:consulta_produto/services/products/search_product_sankhya.dart';
 import 'package:consulta_produto/utils/consts.dart';
 import 'package:consulta_produto/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,8 @@ class _ProductListComponentState extends State<ProductListComponent> {
   @override
   Widget build(BuildContext context) {
     //List<ProductModel> products = ProductListData.products;
-    ProductSankhyaService products = Provider.of(context);
+    // ProductSankhyaService products = Provider.of(context);
+    SearchProductSankhya products = Provider.of(context);
 
     return Expanded(
       child: RefreshIndicator(
