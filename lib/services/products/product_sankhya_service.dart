@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:consulta_produto/data/product_list_data.dart';
 import 'package:consulta_produto/model/product_model.dart';
 import 'package:consulta_produto/model/user_model.dart';
 import 'package:consulta_produto/services/auth/auth_service.dart';
@@ -39,20 +38,10 @@ class ProductSankhyaService with ChangeNotifier implements ProductService {
         jsonDecode(data.body)['responseBody']['entities']['entity'] as List;
     List<ProductModel> products = [];
 
-    jsonList.forEach((item) {
-      //item = item['_rmd'];
-
-      ProductModel product = ProductModel(
-          codigo: int.parse(item['f0']['\$']),
-          descricao: item['f1']['\$'],
-          marca: item['f2']['\$'],
-          valor: 59.99,
-          unidade: item['f3']['\$'],
-          agrupamentoMinimo: 1,
-          referencia: item['f4']['\$']);
-
+    for (var item in jsonList) {
+      ProductModel product = ProductModel.fromJson(item);
       products.add(product);
-    });
+    }
 
     _products.clear();
     _products.addAll([...products]);

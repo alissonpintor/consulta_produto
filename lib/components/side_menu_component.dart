@@ -64,7 +64,7 @@ class _SideMenuWidgetState extends State<SideMenuWidget> {
           selectedIndex = index;
           if (data.menu[index].title == 'SignOut') {
             AuthService().logout();
-            Navigator.popAndPushNamed(context, AppRoutes.home);
+            Navigator.popAndPushNamed(context, AppRoutes.index);
           }
         }),
         child: Row(

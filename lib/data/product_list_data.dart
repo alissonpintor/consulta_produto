@@ -1,8 +1,8 @@
-import 'package:consulta_produto/model/product_model.dart';
+import 'package:consulta_produto/core/produtos/models/produtos.dart';
 
 class ProductListData {
-  static final products = <ProductModel>[
-    ProductModel(
+  static final products = <Produtos>[
+    Produtos(
         codigo: 13504,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',
@@ -12,7 +12,7 @@ class ProductListData {
         codigoFornecedor: '0450',
         estaEmPromocao: false,
         referencia: '7890000000001'),
-    ProductModel(
+    Produtos(
         codigo: 15282,
         descricao: 'Torn. lav mesa 1/2" c-33 1193',
         marca: 'Rainha',
@@ -23,7 +23,7 @@ class ProductListData {
         estaEmPromocao: true,
         novidade: true,
         referencia: '7890000000002'),
-    ProductModel(
+    Produtos(
         codigo: 22614,
         descricao: 'TORN. LAV. MESA 1/2" LOGGICA',
         marca: 'DOCOL',
@@ -34,7 +34,7 @@ class ProductListData {
         estaEmPromocao: false,
         chegouNoEstoque: true,
         referencia: '7891461084349'),
-    ProductModel(
+    Produtos(
         codigo: 11779,
         descricao: 'COLA MADEIRA POLY 250G (12)',
         marca: 'PULVITEC',
@@ -44,7 +44,7 @@ class ProductListData {
         codigoFornecedor: 'IA023',
         estaEmPromocao: false,
         referencia: '7896038105083'),
-    ProductModel(
+    Produtos(
         codigo: 15456,
         descricao: 'TINTA SPRAY DECOR AZUL MEDIO 360ML (6)',
         marca: 'COLORGIN',
@@ -54,7 +54,7 @@ class ProductListData {
         codigoFornecedor: '8621',
         estaEmPromocao: true,
         referencia: '7891494086211'),
-    ProductModel(
+    Produtos(
         codigo: 10001,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',
@@ -64,7 +64,7 @@ class ProductListData {
         codigoFornecedor: '0450',
         estaEmPromocao: false,
         referencia: '7890000000001'),
-    ProductModel(
+    Produtos(
         codigo: 10001,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',
@@ -74,7 +74,7 @@ class ProductListData {
         codigoFornecedor: '0450',
         estaEmPromocao: false,
         referencia: '7890000000001'),
-    ProductModel(
+    Produtos(
         codigo: 10001,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',
@@ -84,7 +84,7 @@ class ProductListData {
         codigoFornecedor: '0450',
         estaEmPromocao: false,
         referencia: '7890000000001'),
-    ProductModel(
+    Produtos(
         codigo: 10001,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',
@@ -94,7 +94,7 @@ class ProductListData {
         codigoFornecedor: '0450',
         estaEmPromocao: false,
         referencia: '7890000000001'),
-    ProductModel(
+    Produtos(
         codigo: 10001,
         descricao: 'Joelhos sold. 90° 25mm',
         marca: 'Krona',

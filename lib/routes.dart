@@ -1,4 +1,4 @@
 class AppRoutes {
-  static const home = '/';
+  static const index = '/';
   static const consulta = '/consulta';
 }

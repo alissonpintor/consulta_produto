@@ -6,23 +6,24 @@ import 'package:provider/provider.dart';
 class ProductCharacteristicsComponent extends StatelessWidget {
   const ProductCharacteristicsComponent({super.key});
 
+  Widget _getProductUrlImage(int codigo) {
+    String imageUrl =
+        'https://sankhya.stoky.dev.br/mgecom/downloadImgProduto.mgecom?codProd=$codigo&noResize=true';
+
+    return Image.network(
+      imageUrl,
+      errorBuilder: (context, exception, strackTrace) {
+        return Image.network(
+          'https://vrmetalurgica.com.br/painel/img/semimagem.png',
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    ProductSankhyaService products = Provider.of(context);
-
-    Widget _getProductUrlImage(int codigo) {
-      String imageUrl =
-          'https://sankhya.stoky.dev.br/mgecom/downloadImgProduto.mgecom?codProd=$codigo&noResize=true';
-
-      return Image.network(
-        imageUrl,
-        errorBuilder: (context, exception, strackTrace) {
-          return Image.network(
-            'https://vrmetalurgica.com.br/painel/img/semimagem.png',
-          );
-        },
-      );
-    }
+    ProductSankhyaService products = ProductSankhyaService();
+    products.loadProducts();
 
     return (products.productsCount == 0)
         ? Center(
