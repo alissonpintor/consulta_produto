@@ -1,8 +1,10 @@
+import 'package:consulta_produto/api/parceiros/parceiro_repository_sankhya.dart';
+import 'package:consulta_produto/api/produtos/produto_repository_sankhya.dart';
+import 'package:consulta_produto/core/parceiros/models/parceiros.dart';
 import 'package:consulta_produto/core/produtos/dto/output_produto_dto.dart';
 import 'package:consulta_produto/core/produtos/services/consultar_por_codigo.dart';
 import 'package:consulta_produto/core/produtos/services/consultar_por_descricao.dart';
 import 'package:consulta_produto/core/produtos/services/consultar_por_marca.dart';
-import 'package:consulta_produto/mock/produto_repository_mock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,49 +17,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _tipoConsulta = 'descricao';
-  var _inputController = TextEditingController();
+  final _inputController = TextEditingController();
+  final _focusNode = FocusNode();
   List<OutputProdutoDto?> items = [];
 
   _buscarPorCodigo(int codigo) async {
-    var repository = ProdutoRepositoryMock();
+    var repository = ProdutoRepositorySankhya();
     var service = ConsultarPorCodigoService();
 
     var produto = await service.execute(codigo, repository);
 
-    if (produto != null) {
-      setState(() {
-        items.clear();
+    setState(() {
+      items.clear();
+      if (produto != null) {
         items.add(produto);
-      });
-    }
+      }
+    });
   }
 
   _buscarPorDescricao(String descricao) async {
-    var repository = ProdutoRepositoryMock();
+    var repository = ProdutoRepositorySankhya();
     var service = ConsultarPorDescricaoService();
 
     var produtos = await service.execute(descricao, repository);
 
-    if (produtos != null) {
-      setState(() {
-        items.clear();
+    setState(() {
+      items.clear();
+      if (produtos.isNotEmpty) {
         items = produtos;
-      });
-    }
+      }
+    });
   }
 
   _buscarPorMarca(String marca) async {
-    var repository = ProdutoRepositoryMock();
+    var repository = ProdutoRepositorySankhya();
     var service = ConsultarPorMarcaService();
 
     var produtos = await service.execute(marca, repository);
 
-    if (produtos != null) {
-      setState(() {
-        items.clear();
+    setState(() {
+      items.clear();
+      if (produtos.isNotEmpty) {
         items = produtos;
-      });
-    }
+      }
+    });
   }
 
   _onSubmit() async {
@@ -78,30 +81,92 @@ class _HomePageState extends State<HomePage> {
     if (_tipoConsulta == 'marca') {
       _buscarPorMarca(busca);
     }
+
+    _focusNode.requestFocus();
+  }
+
+  _testarParceiro() async {
+    var repository = ParceiroRepositorySankhya();
+    var parceiros = await repository.buscarPorNome('con');
+
+    if (parceiros.isEmpty) return;
+    for (var parceiro in parceiros) {
+      print(parceiro!.nome);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            inputForm(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Text(
-                        "${items[index]!.codigo} - ${items[index]!.descricao}"),
-                  );
-                },
+    _testarParceiro();
+
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.keyI, control: true): () {
+          setState(() {
+            _tipoConsulta = 'codigo';
+            _inputController.clear();
+            _focusNode.requestFocus();
+          });
+        },
+        const SingleActivator(LogicalKeyboardKey.keyD, control: true): () {
+          setState(() {
+            _tipoConsulta = 'descricao';
+            _inputController.clear();
+            _focusNode.requestFocus();
+          });
+        },
+        const SingleActivator(LogicalKeyboardKey.keyM, control: true): () {
+          setState(() {
+            _tipoConsulta = 'marca';
+            _inputController.clear();
+            _focusNode.requestFocus();
+          });
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 9,
+                child: Column(
+                  children: [
+                    inputForm(),
+                    const SizedBox(height: 20),
+                    listView(),
+                  ],
+                ),
               ),
-            )
-          ],
+              Expanded(
+                flex: 3,
+                child: Column(
+                  children: [],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget listView() {
+    return items.isEmpty
+        ? const Center(
+            child: Text('Nenhum registro econtrado'),
+          )
+        : Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Text(
+                      "${items[index]!.codigo} - ${items[index]!.descricao}"),
+                );
+              },
+            ),
+          );
   }
 
   Row inputForm() {
@@ -128,6 +193,7 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _tipoConsulta = value!;
                 _inputController.clear();
+                _focusNode.requestFocus();
               });
             },
           ),
@@ -136,6 +202,10 @@ class _HomePageState extends State<HomePage> {
           child: TextField(
             controller: _inputController,
             keyboardType: TextInputType.number,
+            focusNode: _focusNode,
+            onSubmitted: (_) {
+              _onSubmit();
+            },
             inputFormatters: [
               if (_tipoConsulta == 'codigo')
                 FilteringTextInputFormatter.digitsOnly,

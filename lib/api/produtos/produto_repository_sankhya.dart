@@ -18,23 +18,19 @@ class ProdutoRepositorySankhya implements ProdutoRepository {
   ];
 
   @override
-  Future<Produtos> buscarPorCodigo(int codigo) async {
-    Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
-    String sessionId = 'asdasdad';
+  Future<Produtos?> buscarPorCodigo(int codigo) async {
+    expression.clear();
+    parameters.clear();
+
     expression.add('this.CODPROD = ?');
     parameters.add({
       "\$": codigo.toString(),
       "type": "I",
     });
 
-    http.Response data = await http.post(
-      url,
-      body: _getPayload(),
-      headers: {'Cookie': 'JSESSIONID=${sessionId}'},
-    );
+    var json = await _makeRequest();
 
-    var json = jsonDecode(data.body);
-    json = json['responseBody']['entities']['entity'] as List;
+    if (json == null) return null;
 
     var produto = Produtos(
       codigo: int.parse(json['f0']['\$']),
@@ -49,12 +45,77 @@ class ProdutoRepositorySankhya implements ProdutoRepository {
     return produto;
   }
 
+  @override
   Future<List<Produtos>?>? buscarPorDescricao(String descricao) async {
-    return null;
+    expression.clear();
+    parameters.clear();
+
+    expression.add("this.DESCRPROD like '?%'");
+    parameters.add({
+      "\$": descricao.toUpperCase(),
+      "type": "S",
+    });
+
+    var json = await _makeRequest();
+    if (json == null) return [];
+    return _getListaProdutos(json);
   }
 
   Future<List<Produtos>?>? buscarPorMarca(String marca) async {
-    return null;
+    expression.clear();
+    parameters.clear();
+
+    expression.add("this.MARCA like '?%'");
+    parameters.add({
+      "\$": marca.toUpperCase(),
+      "type": "S",
+    });
+
+    var json = await _makeRequest();
+    return _getListaProdutos(json);
+  }
+
+  dynamic _makeRequest() async {
+    Uri url = Uri.parse('$baseUrl?serviceName=$serviceName&outputType=json');
+    String sessionId = 'a3UqdnBbucyGE_HsnFvYgtjmowwlT4NSD4RJbI2D';
+
+    http.Response data = await http.post(
+      url,
+      body: _getPayload(),
+      headers: {'Cookie': 'JSESSIONID=${sessionId}'},
+    );
+
+    var json = jsonDecode(data.body) as Map<dynamic, dynamic>;
+    json = json['responseBody']['entities'];
+
+    if (!json.containsKey('entity')) return null;
+
+    var produtos = json['entity'];
+    if (produtos is List) {
+      produtos = produtos as List;
+    }
+
+    return produtos;
+  }
+
+  List<Produtos> _getListaProdutos(dynamic json) {
+    List<Produtos> produtos = [];
+
+    for (dynamic item in json) {
+      var produto = Produtos(
+        codigo: int.parse(item['f0']['\$']),
+        descricao: item['f1']['\$'],
+        marca: item['f2']['\$'] ?? '',
+        valor: 59.99,
+        unidade: item['f3']['\$'],
+        agrupamentoMinimo: 1,
+        referencia: item['f4']['\$'],
+      );
+
+      produtos.add(produto);
+    }
+
+    return produtos;
   }
 
   dynamic _getPayload() {

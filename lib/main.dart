@@ -2,7 +2,6 @@ import 'package:consulta_produto/app/pages/home/home_page.dart';
 import 'package:consulta_produto/routes.dart';
 import 'package:consulta_produto/services/products/product_sankhya_service.dart';
 import 'package:consulta_produto/services/products/search_product_sankhya.dart';
-import 'package:consulta_produto/utils/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -27,10 +26,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Consulta Produtos',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: backgroundColor,
-          brightness: Brightness.dark,
-        ),
+        // theme: ThemeData(
+        //   scaffoldBackgroundColor: backgroundColor,
+        //   brightness: Brightness.dark,
+        // ),
         routes: {
           AppRoutes.index: (ctx) => const HomePage(),
         },
